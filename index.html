@@ -563,7 +563,7 @@ function setScene(bg, fl) {
 /* ───────── build: lit text + timeline ───────── */
 // 단어 앞 '*' = 강조색, '~' = 이모티콘
 function litHTML(words) { return words.map(w => w[0] === '*' ? `<span class="hl">${w.slice(1)}</span>` : w[0] === '~' ? `<span class="tf">${w.slice(1)}</span>` : `<span>${w}</span>`).join(' '); }
-$('#lit').innerHTML = litHTML(['2026년의', '시작부터', '마지막까지,', '*First와', '*함께한', '*계절을', '천천히', '돌아볼게요.', '~🎞️']);
+$('#lit').innerHTML = litHTML(['2026년의', '시작부터', '마지막까지,', '*First와', '*함께한', '*계절을', '천천히', '돌아볼게요.', '~❄️']);
 $('#invLit').innerHTML = litHTML(['찬란했던', '우리의', '마지막을', '기념하는', '행사에', '여러분을', '*초대합니다.']);
 
 (function buildTimeline() {
