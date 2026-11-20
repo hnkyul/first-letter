@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1424">
 <meta name="robots" content="noindex">
-<title>First와 함께하는 마지막 행사</title>
-<meta property="og:title" content="First와 함께하는 마지막 행사">
+<title>F1rst와 함께하는 마지막 행사</title>
+<meta property="og:title" content="F1rst와 함께하는 마지막 행사">
 <meta property="og:description" content="찬란했던 우리의 마지막을 기념하는 행사에 여러분을 초대합니다">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -216,7 +216,7 @@ body.fin-on #snow{z-index:47}
 .btn.text{margin-top:6px;height:48px;background:none;color:rgba(255,255,255,.7);font-size:15px;font-weight:600}
 .btn.text:active{background:rgba(255,255,255,.08)}
 
-/* ───────── First가 전하는 편지: 봉투 열림 ───────── */
+/* ───────── F1rst가 전하는 편지: 봉투 열림 ───────── */
 .lx{position:fixed;inset:0;z-index:50;overflow:hidden;background:rgba(4,10,22,0);transition:background .5s ease,opacity .4s ease}
 .lx.on{background:rgba(4,10,22,.9)}
 .lx.out{opacity:0}
@@ -335,9 +335,9 @@ body.fin-on #snow{z-index:47}
       <span class="fl" data-speed=".36" style="--x:40%;--y:5%;--s:28px;--r:20deg;--d:5s;--dl:.8s"><b class="tf">📷</b></span>
     </div>
     <div class="col hero-inner" id="heroInner">
-      <p class="eyebrow"><span class="tf">❄️</span> 2026 겨울 · 통계학과 학생회 First</p>
+      <p class="eyebrow"><span class="tf">❄️</span> 2026 겨울 · 통계학과 학생회 F1rst</p>
       <h1 class="hero-title">
-        <span class="w"><i style="--i:0"><em>First</em>와</i></span>
+        <span class="w"><i style="--i:0"><em>F1rst</em>와</i></span>
         <span class="w"><i style="--i:1">함께하는</i></span><br>
         <span class="w"><i style="--i:2">마지막</i></span>
         <span class="w"><i style="--i:3">행사</i></span>
@@ -441,7 +441,7 @@ body.fin-on #snow{z-index:47}
     <h2 class="done-t" id="doneT">사진이 도착했어요</h2>
     <p class="done-s" id="doneS"></p>
     <div class="done-btns">
-      <button class="btn gift" id="openLetter" type="button"><span class="tf">💌</span>First가 전하는 편지 열어보기</button>
+      <button class="btn gift" id="openLetter" type="button"><span class="tf">💌</span>F1rst가 전하는 편지 열어보기</button>
       <button class="btn text" id="editBtn" type="button">내 사진 바꾸기</button>
     </div>
   </div>
@@ -460,7 +460,7 @@ body.fin-on #snow{z-index:47}
   <canvas id="burst"></canvas>
   <div class="lx-flash"></div>
   <article class="lcard" id="lcard" role="dialog" aria-modal="true" aria-labelledby="lcardT">
-    <p class="from">From. First</p>
+    <p class="from">From. F1rst</p>
     <h3 id="lcardT" style="--i:1"></h3>
     <div class="body" id="lcardBody"></div>
     <button class="btn" id="closeLetter" type="button">다음</button>
@@ -537,15 +537,15 @@ const CONFIG = {
     { src: 'photos/11-eagle-1.jpg', cap: '2026 독수리제전' },
     { src: 'photos/11-fallmt-1.jpg', cap: '2026 가을 MT' },
   ],
-  // 편지 보내기 후 "First가 전하는 편지 열어보기"에서 보이는 편지. 문단마다 한 항목.
+  // 편지 보내기 후 "F1rst가 전하는 편지 열어보기"에서 보이는 편지. 문단마다 한 항목.
   LETTER: {
     title: '함께해 준 여러분께',
     body: [
       '2026년 한 해를 여러분들과 함께할 수 있어서 행복했습니다. 소중한 추억들을 간직하겠습니다.',
       '어느 해보다도 올해의 봄은 설렜고, 여름은 뜨거웠으며, 가을은 풍성했습니다. 마지막 남은 겨울은 따뜻했으면 좋겠습니다.',
-      '지금까지의 First와 함께 해주셔서 감사합니다.',
+      '지금까지의 F1rst와 함께 해주셔서 감사합니다.',
     ],
-    sign: 'First 학생회 일동',
+    sign: 'F1rst 학생회 일동',
   },
   // 마지막 화면
   FINALE: {
@@ -615,7 +615,7 @@ function setScene(bg, fl) {
 /* ───────── build: 문장 + 타임라인 + 폴라로이드 ───────── */
 // 단어 앞 '*' = 강조색, '~' = 이모티콘
 function litHTML(words) { return words.map(w => w[0] === '*' ? `<span class="hl">${w.slice(1)}</span>` : w[0] === '~' ? `<span class="tf">${w.slice(1)}</span>` : `<span>${w}</span>`).join(' '); }
-$('#lit').innerHTML = litHTML(['2026년의', '시작부터', '마지막까지,', '*First와', '*함께한', '*계절을', '천천히', '돌아볼게요.', '~❄️']);
+$('#lit').innerHTML = litHTML(['2026년의', '시작부터', '마지막까지,', '*F1rst와', '*함께한', '*계절을', '천천히', '돌아볼게요.', '~❄️']);
 $('#invLit').innerHTML = litHTML(['찬란했던', '우리의', '마지막을', '기념하는', '행사에', '여러분을', '*초대합니다.']);
 
 (function buildTimeline() {
@@ -1066,7 +1066,7 @@ $('#editBtn').addEventListener('click', async () => {
   await sleep(450); done.hidden = true;
 });
 
-/* ───────── 4. First가 전하는 편지: 봉투가 열리는 연출 ───────── */
+/* ───────── 4. F1rst가 전하는 편지: 봉투가 열리는 연출 ───────── */
 (function buildLetter() {
   const L = CONFIG.LETTER;
   $('#lcardT').textContent = L.title;
