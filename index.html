@@ -92,7 +92,11 @@ body.story #story{display:block}
 #inv .kicker{margin-bottom:14px}
 #s2 .kicker{color:var(--blue)}
 #s2 .scene-h{color:var(--ink)}
-.stack{position:relative;height:min(46svh,330px);margin-top:22px}
+.prize{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding:12px 14px;border-radius:16px;background:#fff4d6;color:#6b4a00;font-size:14px;line-height:1.5;font-weight:600}
+.prize .tf{flex:none;font-size:22px;line-height:1.1}
+.prize b{color:#c25e00;font-weight:800}
+.prize.light{margin-top:16px}
+.stack{position:relative;height:min(42svh,300px);margin-top:18px}
 .pc{position:absolute;left:50%;top:4%;width:min(62vw,250px);margin-left:max(-31vw,-125px);background:#fff;padding:10px 10px 0;border-radius:6px;
   box-shadow:0 22px 50px rgba(20,35,58,.28);will-change:transform}
 .pc img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;background:var(--g100)}
@@ -380,6 +384,7 @@ body.fin-on #snow{z-index:47}
           <p class="kicker">마지막 행사는</p>
           <h2 class="scene-h">사진전이에요</h2>
           <p class="scene-p">올해 가장 빛났던 순간을 한 장 보내주세요.<br>종강총회 날 사진전에 걸려요.</p>
+          <p class="prize"><span class="tf">🎁</span><span>사진전에서 가장 소중한 사진을 보내준 학우들에겐 <b>다양한 상품</b>이 준비되어 있습니다</span></p>
         </div>
         <div class="stack" id="stack"></div>
         <p class="s2cap" id="s2cap">이제, 여러분의 한 장을 보여주세요<small class="tf" aria-hidden="true">👇</small></p>
@@ -398,6 +403,7 @@ body.fin-on #snow{z-index:47}
     <span class="chip swap"><span class="tf">📷</span> 사진전 참여</span>
     <h2 class="q swap"><em id="who"></em>님,<br>올해 가장 빛났던 순간<br>한 장을 보내주세요</h2>
     <p class="qsub swap" id="photoSub">한 사람당 한 장이에요. 다시 올리면 새 사진으로 바뀌어요.</p>
+    <p class="prize light swap"><span class="tf">🎁</span><span>사진전에서 가장 소중한 사진을 보내준 학우들에겐 <b>다양한 상품</b>이 준비되어 있습니다</span></p>
     <div class="polaroid" id="pol">
       <label class="pol-img" for="inFile" id="polImg">
         <img id="polPic" alt="고른 사진 미리보기" hidden>
