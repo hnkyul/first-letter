@@ -30,12 +30,14 @@ body{
 button{font:inherit;color:inherit;cursor:pointer}
 .tf{font-family:Tossface,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-style:normal;font-weight:400}
 .col{width:100%;max-width:480px;margin:0 auto;padding:0 24px}
+.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
 #snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
 #intro{position:relative;z-index:1}
 
-/* ───────── hero ───────── */
-.hero{position:relative;height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;
+/* ───────── 첫 화면: 제목 + 이름·학번 ───────── */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;overflow:hidden;
+  padding:calc(14vh + env(safe-area-inset-top)) 0 calc(28px + env(safe-area-inset-bottom));
   background:
     radial-gradient(72% 44% at 50% 0%,rgba(49,130,246,.4),transparent 72%),
     radial-gradient(50% 32% at 96% 82%,rgba(120,200,255,.16),transparent 70%);
@@ -48,58 +50,71 @@ button{font:inherit;color:inherit;cursor:pointer}
 .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.08em}
 .w i{display:inline-block;font-style:normal;transform:translateY(112%);animation:rise 1s var(--ease) forwards;animation-delay:calc(var(--i)*110ms + 250ms)}
 .hero-sub{margin-top:18px;font-size:17px;line-height:1.55;color:rgba(255,255,255,.66);font-weight:500;opacity:0;animation:fadeUp .9s var(--ease) .95s forwards}
-.hero-foot{position:absolute;left:0;right:0;bottom:calc(28px + env(safe-area-inset-bottom));z-index:2;display:flex;flex-direction:column;align-items:center;gap:18px;
-  opacity:0;animation:fadeUp .9s var(--ease) 1.4s forwards}
+.gate{position:relative;z-index:2;margin-top:auto;padding-top:36px;opacity:0;animation:fadeUp .9s var(--ease) 1.3s forwards}
+.gate-q{font-size:15px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:12px}
+.gf{display:block;margin-top:10px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.16);border-radius:18px;padding:12px 18px 10px;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:border-color .2s,box-shadow .2s,background .2s}
+.gf>span{display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.6);transition:color .2s}
+.gf input{display:block;width:100%;border:0;background:none;outline:0;padding:3px 0 1px;font:inherit;font-size:20px;font-weight:600;color:#fff;caret-color:var(--sky)}
+.gf input::placeholder{color:rgba(255,255,255,.28);font-weight:500}
+.gf:focus-within{border-color:var(--sky);background:rgba(255,255,255,.12);box-shadow:0 0 0 4px rgba(159,208,255,.16)}
+.gf:focus-within>span{color:var(--sky)}
+.gf.err{border-color:#ff8a94}.gf.err>span{color:#ff8a94}
+.gate .btn{margin-top:16px;max-width:none}
+.gate-note{margin-top:12px;text-align:center;font-size:12px;color:rgba(255,255,255,.45)}
+.hello{position:relative;z-index:2;margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+.hello p{font-size:18px;font-weight:700;line-height:1.5}
+.hello p b{color:var(--sky)}
+.hello.in{animation:fadeUp .7s var(--ease)}
 .scroll-hint{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:13px;font-weight:500;color:rgba(255,255,255,.55)}
 .scroll-hint span{width:24px;height:38px;border-radius:14px;border:2px solid rgba(255,255,255,.4);position:relative}
 .scroll-hint span::after{content:"";position:absolute;left:50%;top:7px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:#fff;animation:wheel 1.6s ease-in-out infinite}
-.skip{border:0;background:none;font-size:14px;font-weight:600;color:rgba(255,255,255,.8);padding:8px 12px;text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(255,255,255,.3)}
 .floaters{position:absolute;inset:0;z-index:1;pointer-events:none}
 .fl{position:absolute;left:var(--x);top:var(--y);will-change:transform}
 .fl b{display:block;font-size:var(--s);font-weight:400;line-height:1;filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));opacity:0;
   animation:pop .9s var(--ease) calc(var(--dl,0s) + .5s) forwards, bob var(--d,6s) ease-in-out calc(var(--dl,0s) + 1.4s) infinite}
 
-/* ───────── pinned scenes ───────── */
+/* ───────── 회상 (이름 입력 뒤에 열림) ───────── */
+#story{display:none}
+body.story #story{display:block}
 .scene{position:relative}
 .stage{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
-#s1{height:200vh} #inv{height:250vh} #s2{height:330vh}
+#s1{height:200vh} #inv{height:250vh} #s2{height:320vh}
 .lit{font-size:clamp(26px,7.8vw,34px);line-height:1.46;font-weight:700;letter-spacing:-.03em}
 .lit.big{font-size:clamp(30px,9vw,40px);line-height:1.4;font-weight:800}
 .lit span{opacity:.16;will-change:opacity}
 .lit span.hl{color:var(--sky)}
 .kicker{font-size:15px;font-weight:700;color:var(--sky)}
 .scene-h{margin-top:8px;font-size:clamp(28px,8.2vw,36px);line-height:1.3;font-weight:800;letter-spacing:-.03em}
+.scene-p{margin-top:10px;font-size:16px;line-height:1.55;font-weight:500;color:var(--g600)}
 .flake-bg{position:absolute;left:50%;top:50%;font-size:300px;line-height:1;margin:-150px 0 0 -150px;width:300px;height:300px;text-align:center;opacity:.12;pointer-events:none;will-change:transform}
 #inv .col{position:relative}
 #inv .kicker{margin-bottom:14px}
-.deck{position:relative;height:min(46svh,330px);margin-top:32px}
-.card{position:absolute;inset:0;border-radius:28px;padding:26px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;will-change:transform;
-  box-shadow:0 -10px 40px rgba(0,0,0,.35)}
-.card::after{content:"";position:absolute;inset:0;background:var(--night);opacity:var(--dim,0);pointer-events:none}
-.card.c1{background:linear-gradient(160deg,#2a63b5,#143463)}
-.card.c2{background:linear-gradient(160deg,#4a4fb0,#23265e)}
-.card.c3{background:linear-gradient(160deg,#157f92,#0c4353)}
-.card .emo{position:absolute;right:20px;top:18px;font-size:92px;line-height:1;filter:drop-shadow(0 14px 20px rgba(0,0,0,.3))}
-.card .no{font-size:13px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:.04em}
-.card h3{margin-top:6px;font-size:24px;line-height:1.35;font-weight:800;letter-spacing:-.03em}
-.card p{margin-top:8px;font-size:15px;line-height:1.5;color:rgba(255,255,255,.72)}
-.s2cap{margin-top:30px;text-align:center;color:var(--ink);font-size:22px;font-weight:800;letter-spacing:-.03em}
-.s2cap small{display:block;margin-top:10px;font-size:22px;animation:bob 1.6s ease-in-out infinite}
+#s2 .kicker{color:var(--blue)}
+#s2 .scene-h{color:var(--ink)}
+.stack{position:relative;height:min(46svh,330px);margin-top:22px}
+.pc{position:absolute;left:50%;top:4%;width:min(62vw,250px);margin-left:max(-31vw,-125px);background:#fff;padding:10px 10px 0;border-radius:6px;
+  box-shadow:0 22px 50px rgba(20,35,58,.28);will-change:transform}
+.pc img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:2px;background:var(--g100)}
+.pc span{display:block;padding:10px 2px 13px;font-size:13px;font-weight:700;color:var(--g700)}
+.s2cap{margin-top:8px;text-align:center;color:var(--ink);font-size:20px;font-weight:800;letter-spacing:-.03em}
+.s2cap small{display:block;margin-top:8px;font-size:22px;animation:bob 1.6s ease-in-out infinite}
 
-/* ───────── 2026 timeline ───────── */
-.mo{position:relative;min-height:100vh;min-height:100svh;padding:16vh 0 12vh;overflow:hidden}
+/* 2026 타임라인 */
+.mo{position:relative;padding:16vh 0 10vh;overflow:hidden}
 .mo-date{font-size:14px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.6)}
 .mo-num{margin-top:4px;font-size:clamp(96px,30vw,132px);line-height:.92;font-weight:800;letter-spacing:-.06em;will-change:transform,opacity}
 .mo-num small{font-size:.34em;font-weight:700;letter-spacing:-.02em;margin-left:6px;color:rgba(255,255,255,.8)}
-.mo-ev{margin-top:26px;font-size:22px;line-height:1.4;font-weight:700;letter-spacing:-.03em}
-.shots{margin-top:30px;display:flex;flex-direction:column;gap:20px}
-.shot{position:relative;width:88%;aspect-ratio:4/3;border-radius:24px;overflow:hidden;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+.ev{margin-top:34px}
+.ev+.ev{margin-top:64px}
+.mo-ev{display:flex;align-items:center;gap:10px;font-size:23px;line-height:1.4;font-weight:800;letter-spacing:-.03em}
+.mo-ev::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.7}
+.shots{margin-top:22px;display:flex;flex-direction:column;gap:20px}
+.shot{position:relative;width:90%;border-radius:22px;overflow:hidden;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
   box-shadow:0 24px 60px rgba(0,0,0,.35);will-change:transform,opacity}
+.shot.tall{width:66%}
 .shot:nth-child(even){align-self:flex-end}
-.shot img{display:block;width:100%;height:100%;object-fit:cover}
-.shot figcaption{position:absolute;left:12px;bottom:12px;padding:7px 13px;border-radius:99px;background:rgba(10,20,36,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:13px;font-weight:600}
-.shot .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-size:13px;font-weight:600;color:rgba(255,255,255,.55)}
-.shot .ph b{font-size:56px;font-weight:400;line-height:1}
+.shot img{display:block;width:100%;height:auto}
 .pill{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top));z-index:15;display:flex;align-items:center;gap:10px;padding:9px 16px;border-radius:99px;
   background:rgba(10,20,36,.55);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.14);
   font-size:13px;font-weight:700;white-space:nowrap;transform:translate(-50%,-80px);opacity:0;transition:transform .5s var(--ease),opacity .3s;pointer-events:none}
@@ -108,91 +123,65 @@ button{font:inherit;color:inherit;cursor:pointer}
 .pill i{display:block;width:64px;height:4px;border-radius:2px;background:rgba(255,255,255,.2);overflow:hidden}
 .pill u{display:block;height:100%;width:100%;background:#fff;border-radius:2px;transform-origin:0 50%;transform:scaleX(0)}
 
-/* ───────── form (winter) ───────── */
-#app{position:relative;z-index:1;color:var(--ink);min-height:100vh;min-height:100svh;padding-bottom:150px}
-.nav{display:none;position:sticky;top:0;z-index:5;height:52px;align-items:center;background:rgba(243,248,253,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+/* ───────── 사진 올리기 (밝은 겨울 톤) ───────── */
+#app{position:relative;z-index:1;color:var(--ink);min-height:100vh;min-height:100svh;padding-bottom:150px;display:none}
+body.app #app{display:block}
+.nav{position:sticky;top:0;z-index:5;height:52px;display:flex;align-items:center;background:rgba(243,248,253,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .nav .col{padding:0 12px}
 .nav button{width:44px;height:44px;border:0;background:none;border-radius:12px;display:grid;place-items:center}
 .nav button:active{background:var(--g200)}
-body.app .nav{display:flex}
-.step{padding-top:84px}
-body.app .step{padding-top:18px}
+.step{padding-top:14px}
 .chip{display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;padding:7px 12px;border-radius:99px;background:var(--blue-tint);color:var(--blue-strong);font-size:13px;font-weight:700}
 .q{font-size:26px;line-height:1.42;font-weight:700;letter-spacing:-.03em}
 .q em{font-style:normal;color:var(--blue)}
 .qsub{margin-top:10px;font-size:16px;line-height:1.5;color:var(--g600);font-weight:500}
-.reveal>*{opacity:0;transform:translateY(22px)}
-.reveal.in>*{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.reveal.in>*:nth-child(2){transition-delay:.08s}.reveal.in>*:nth-child(3){transition-delay:.16s}.reveal.in>*:nth-child(4){transition-delay:.24s}
 .swap{animation:swap .5s var(--ease)}
-
-.fields{margin-top:14px}
-.field{display:block;margin-top:12px;max-height:190px;overflow:hidden;background:#fff;border:1.5px solid var(--g200);border-radius:18px;padding:14px 18px 12px;
-  box-shadow:0 8px 24px rgba(49,130,246,.07);
-  transition:max-height .5s var(--ease),opacity .4s ease,margin-top .5s var(--ease),padding .5s var(--ease),transform .5s var(--ease),border-color .2s,box-shadow .2s}
-.field.collapsed{max-height:0;margin-top:0;padding-top:0;padding-bottom:0;border-width:0;opacity:0;transform:translateY(-10px)}
-.field>span{display:block;font-size:13px;font-weight:600;color:var(--g600);transition:color .2s}
-.field input{display:block;width:100%;border:0;border-radius:0;background:none;outline:0;padding:4px 0 2px;font:inherit;font-size:21px;font-weight:600;color:var(--ink);caret-color:var(--blue)}
-.field input::placeholder{color:var(--g300);font-weight:500}
-.field:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px rgba(49,130,246,.15)}
-.field:focus-within>span{color:var(--blue)}
-.field small{display:block;margin-top:6px;font-size:13px;line-height:1.5;color:var(--g500)}
-.field.err{border-color:var(--red)} .field.err>span{color:var(--red)}
-#inPin{letter-spacing:.5em}
-.shake{animation:shake .4s}
-
-.members{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}
-.m{position:relative;display:flex;align-items:center;gap:11px;padding:13px 12px;border-radius:18px;border:1.5px solid var(--g200);background:#fff;text-align:left;
-  opacity:0;animation:fadeUp .55s var(--ease) forwards;animation-delay:calc(var(--i)*35ms + 120ms);transition:transform .15s,border-color .2s,background .2s,box-shadow .2s}
-.m:active{transform:scale(.96)}
-.m.sel{border-color:var(--blue);background:var(--blue-tint);box-shadow:0 0 0 3px rgba(49,130,246,.14)}
-.m.wide{grid-column:1/-1;padding:16px 14px;background:linear-gradient(135deg,#eaf4ff,#fff)}
-.m.wide.sel{background:var(--blue-tint)}
-.av{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:17px;font-weight:700}
-.m.wide .av{width:48px;height:48px;font-size:26px;background:var(--blue)}
-.m b{display:block;font-size:16px;font-weight:700;color:var(--ink);white-space:nowrap}
-.m small{display:block;margin-top:2px;font-size:12px;font-weight:500;color:var(--g600);white-space:nowrap}
-.m .ck{position:absolute;right:10px;top:10px;width:20px;height:20px;border-radius:50%;background:var(--blue);display:grid;place-items:center;transform:scale(0);transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
-.m.sel .ck{transform:scale(1)}
-
-.line{display:flex;align-items:flex-start;gap:14px;margin-top:12px;padding:12px 16px 10px 12px;border-radius:20px;background:#fff;border:1.5px solid var(--g200);box-shadow:0 8px 24px rgba(49,130,246,.07);
-  opacity:0;animation:fadeUp .6s var(--ease) forwards;animation-delay:calc(var(--i)*90ms + 150ms);transition:border-color .2s,box-shadow .2s}
-#poem{margin-top:22px}
-.line:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px rgba(49,130,246,.15)}
-.ch{flex:none;width:50px;height:50px;border-radius:16px;background:var(--blue-tint);color:var(--blue);font-size:23px;font-weight:800;display:grid;place-items:center;
-  transition:background .25s,color .25s,transform .35s cubic-bezier(.3,1.6,.5,1)}
-.line:focus-within .ch{background:var(--blue);color:#fff;transform:scale(1.06) rotate(-4deg)}
-.line .box{flex:1;min-width:0}
-.line textarea{display:block;width:100%;border:0;border-radius:0;background:none;outline:0;resize:none;overflow:hidden;
-  padding:11px 0 4px;font:inherit;font-size:18px;font-weight:600;line-height:1.45;color:var(--ink);caret-color:var(--blue)}
-.line textarea::placeholder{color:var(--g300);font-weight:500}
-.line .cnt{display:block;text-align:right;font-size:12px;color:var(--g500);font-variant-numeric:tabular-nums}
+.polaroid{margin:26px auto 0;width:min(100%,340px);background:#fff;border-radius:8px;padding:12px 12px 4px;box-shadow:0 26px 60px rgba(49,130,246,.16),0 0 0 1px var(--g200);
+  transform:rotate(-1.5deg);transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+.polaroid.pop{animation:polPop .6s cubic-bezier(.3,1.6,.5,1)}
+.pol-img{position:relative;display:block;width:100%;aspect-ratio:4/5;border-radius:4px;overflow:hidden;cursor:pointer;background:var(--ice);
+  outline:2px dashed var(--g300);outline-offset:-2px;transition:aspect-ratio .4s var(--ease)}
+.polaroid.has .pol-img{outline:0}
+.pol-img img{display:block;width:100%;height:100%;object-fit:cover}
+.pol-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:var(--g600)}
+.pol-empty .tf{font-size:54px;line-height:1;margin-bottom:4px}
+.pol-empty b{font-size:17px;font-weight:700;color:var(--blue)}
+.pol-empty small{font-size:13px}
+.pol-img:active .pol-empty{transform:scale(.97)}
+.pol-cap{display:block;width:100%;border:0;background:none;outline:0;padding:14px 4px 12px;font:inherit;font-size:16px;font-weight:600;color:var(--ink);text-align:center}
+.pol-cap::placeholder{color:var(--g300)}
+.repick{display:block;margin:14px auto 0;border:0;background:var(--g100);color:var(--g700);border-radius:12px;padding:10px 16px;font-size:14px;font-weight:700}
+.repick:active{background:var(--g200)}
+.note{margin-top:16px;text-align:center;font-size:13px;color:var(--g500)}
+.mine-tag{display:inline-flex;margin-top:12px;padding:6px 10px;border-radius:8px;background:var(--g100);color:var(--g700);font-size:13px;font-weight:600}
 
 .cta{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:20px 20px calc(16px + env(safe-area-inset-bottom));
   background:linear-gradient(to top,var(--ice) 72%,rgba(243,248,253,0));transform:translateY(110%);transition:transform .5s var(--ease);pointer-events:none}
 .cta.show{transform:translateY(calc(var(--kb) * -1));pointer-events:auto}
-.btn{display:flex;align-items:center;justify-content:center;width:100%;max-width:440px;margin:0 auto;height:56px;border:0;border-radius:16px;
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:440px;margin:0 auto;height:56px;border:0;border-radius:16px;
   background:var(--blue);color:#fff;font-size:17px;font-weight:700;transition:transform .12s,background .2s,opacity .2s}
 .btn:active{transform:scale(.97);background:var(--blue-strong)}
 .btn.off{background:#b3d2fb}
+.gate .btn.off{background:rgba(49,130,246,.45);color:rgba(255,255,255,.75)}
 .btn.busy{pointer-events:none}
 .dots{display:none;gap:6px}.btn.busy .dots{display:flex}.btn.busy .lbl{display:none}
 .dots i{width:7px;height:7px;border-radius:50%;background:#fff;animation:dot 1s infinite ease-in-out}
 .dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
 
-.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom) + var(--kb));z-index:60;max-width:calc(100% - 40px);padding:13px 18px;border-radius:14px;
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom) + var(--kb));z-index:90;max-width:calc(100% - 40px);padding:13px 18px;border-radius:14px;
   background:rgba(20,35,58,.94);color:#fff;font-size:15px;font-weight:600;line-height:1.4;text-align:center;
   transform:translate(-50%,20px);opacity:0;pointer-events:none;transition:opacity .3s,transform .4s var(--ease)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.badge{position:fixed;top:calc(10px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:70;padding:6px 12px;border-radius:99px;
+.badge{position:fixed;top:calc(10px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:95;padding:6px 12px;border-radius:99px;
   background:rgba(255,195,66,.95);color:#3d2b00;font-size:12px;font-weight:700;white-space:nowrap;pointer-events:none}
 
-/* ───────── done: snowman yard ───────── */
+/* ───────── 완료: 눈사람 마당 ───────── */
 .done{position:fixed;inset:0;z-index:40;background:var(--night);color:#fff;overflow-y:auto;opacity:0;transition:opacity .5s ease;
   background-image:radial-gradient(80% 46% at 50% 4%,rgba(49,130,246,.36),transparent 72%)}
 .done.show{opacity:1}
 body.done-on #snow{z-index:41;opacity:1!important}
 body.lx-on #snow{z-index:52}
+body.fin-on #snow{z-index:47}
 .done .col{position:relative;z-index:42;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding-top:calc(28px + env(safe-area-inset-top));padding-bottom:calc(24px + env(safe-area-inset-bottom));text-align:center}
 .yard-wrap{width:min(100%,380px,52svh);border-radius:32px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.1);
@@ -217,12 +206,13 @@ body.lx-on #snow{z-index:52}
 .done-t,.done-s,.done-btns{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .done.s2 .done-t,.done.s2 .done-s{opacity:1;transform:none}.done.s2 .done-s{transition-delay:.1s}
 .done.s3 .done-btns{opacity:1;transform:none}
-.btn.gift{background:#fff;color:var(--ink);gap:8px;box-shadow:0 0 0 0 rgba(159,208,255,.6);animation:pulse 2.2s ease-out infinite}
+.btn.gift{background:#fff;color:var(--ink);box-shadow:0 0 0 0 rgba(159,208,255,.6);animation:pulse 2.2s ease-out infinite}
 .btn.gift:active{background:var(--g100)}
+.btn.gift.off{background:rgba(255,255,255,.18);color:rgba(255,255,255,.8);animation:none}
 .btn.text{margin-top:6px;height:48px;background:none;color:rgba(255,255,255,.7);font-size:15px;font-weight:600}
 .btn.text:active{background:rgba(255,255,255,.08)}
 
-/* ───────── letter opening ───────── */
+/* ───────── First가 전하는 편지: 봉투 열림 ───────── */
 .lx{position:fixed;inset:0;z-index:50;overflow:hidden;background:rgba(4,10,22,0);transition:background .5s ease,opacity .4s ease}
 .lx.on{background:rgba(4,10,22,.9)}
 .lx.out{opacity:0}
@@ -267,8 +257,40 @@ body.lx-on #snow{z-index:52}
 .lcard .sign{margin-top:18px;text-align:right;font-size:15px;font-weight:700;color:var(--ink)!important}
 .lcard .from,.lcard h3,.lcard .body>*,.lcard .btn{opacity:0;transform:translateY(12px)}
 .lx.e5 .lcard .from,.lx.e5 .lcard h3,.lx.e5 .lcard .body>*,.lx.e5 .lcard .btn{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--i,0)*150ms + 500ms)}
-.btn.grey{margin-top:18px;background:var(--g100);color:var(--g700)}
+.lcard .btn{margin-top:18px}
+
+/* ───────── 마지막: 매듭 + 종강총회 신청 ───────── */
+.fin{position:fixed;inset:0;z-index:46;color:#fff;overflow-y:auto;opacity:0;transition:opacity .7s ease;
+  background:var(--night) radial-gradient(90% 55% at 50% 100%,rgba(49,130,246,.3),transparent 70%)}
+.fin.show{opacity:1}
+.fin .col{position:relative;min-height:100%;display:flex;flex-direction:column;justify-content:center;
+  padding-top:calc(40px + env(safe-area-inset-top));padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+.fin-k{display:inline-flex;align-self:flex-start;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;background:rgba(255,255,255,.1);font-size:13px;font-weight:700;color:rgba(255,255,255,.86)}
+.fin-t{margin-top:22px;font-size:clamp(30px,8.6vw,38px);line-height:1.42;font-weight:800;letter-spacing:-.03em}
+.fin-t span{display:inline-block;opacity:0;transform:translateY(16px);filter:blur(6px)}
+.fin.show .fin-t span{opacity:1;transform:none;filter:none;transition:opacity .8s var(--ease),transform .8s var(--ease),filter .8s ease;transition-delay:calc(var(--i)*160ms + 400ms)}
+.fin-t span.hl{color:var(--sky)}
+.fin-s{margin-top:16px;font-size:16px;line-height:1.55;color:rgba(255,255,255,.62);font-weight:500;opacity:0;transition:opacity .8s ease 2.2s}
+.fin.show .fin-s{opacity:1}
+.fin-btns{margin-top:auto;padding-top:48px;opacity:0;transform:translateY(16px);transition:opacity .8s var(--ease) 2.5s,transform .8s var(--ease) 2.5s}
+.fin.show .fin-btns{opacity:1;transform:none}
+.fin-btns .btn{max-width:none}
+
+.dim{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);opacity:0;transition:opacity .35s ease}
+.dim.show{opacity:1}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;max-width:520px;margin:0 auto;background:#fff;color:var(--ink);border-radius:28px 28px 0 0;
+  padding:10px 24px calc(20px + env(safe-area-inset-bottom));text-align:center;transform:translateY(105%);transition:transform .5s var(--ease)}
+.sheet.show{transform:none}
+.sheet::before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--g300);margin:0 auto 22px}
+.sheet .emo{display:block;font-size:56px;line-height:1}
+.sheet h3{margin-top:14px;font-size:22px;line-height:1.4;font-weight:800;letter-spacing:-.03em}
+.sheet p{margin-top:8px;font-size:15px;line-height:1.5;color:var(--g600)}
+.sheet p b{color:var(--ink)}
+.row2{display:flex;gap:10px;margin-top:24px}
+.row2 .btn{flex:1}
+.btn.grey{background:var(--g100);color:var(--g700)}
 .btn.grey:active{background:var(--g200)}
+#okView .emo{animation:pop .6s cubic-bezier(.3,1.6,.5,1)}
 
 @keyframes rise{to{transform:none}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
@@ -286,8 +308,10 @@ body.lx-on #snow{z-index:52}
 @keyframes halo{0%,100%{transform:scale(.92)}50%{transform:scale(1.12)}}
 @keyframes flash{0%{opacity:1;transform:scale(0)}55%{opacity:.95}100%{opacity:0;transform:scale(46)}}
 @keyframes envShake{0%,100%{transform:rotate(0)}15%{transform:rotate(-7deg) scale(1.04)}30%{transform:rotate(6deg) scale(1.06)}45%{transform:rotate(-5deg) scale(1.08)}60%{transform:rotate(4deg) scale(1.08)}80%{transform:rotate(-2deg) scale(1.04)}}
+@keyframes polPop{0%{transform:rotate(-1.5deg) scale(1)}35%{transform:rotate(2deg) scale(1.05)}100%{transform:rotate(-1.5deg) scale(1)}}
+.shake{animation:shake .4s}
 @media (prefers-reduced-motion:reduce){
-  .w i,.eyebrow,.hero-sub,.hero-foot,.fl b,.m,.line{animation:none!important;opacity:1!important;transform:none!important}
+  .w i,.eyebrow,.hero-sub,.gate,.fl b{animation:none!important;opacity:1!important;transform:none!important}
   .scroll-hint span::after,.s2cap small,.lx-rays,.btn.gift{animation:none}
 }
 </style>
@@ -300,12 +324,11 @@ body.lx-on #snow{z-index:52}
 <div id="intro">
   <section class="hero" id="hero">
     <div class="floaters" aria-hidden="true">
-      <span class="fl" data-speed=".42" style="--x:8%;--y:11%;--s:56px;--r:-12deg;--d:6.5s;--dl:.0s"><b class="tf">❄️</b></span>
-      <span class="fl" data-speed=".18" style="--x:74%;--y:13%;--s:46px;--r:12deg;--d:5.2s;--dl:.2s"><b class="tf">🧣</b></span>
-      <span class="fl" data-speed=".3" style="--x:78%;--y:62%;--s:66px;--r:8deg;--d:7s;--dl:.35s"><b class="tf">⛄</b></span>
-      <span class="fl" data-speed=".55" style="--x:7%;--y:70%;--s:46px;--r:-8deg;--d:5.8s;--dl:.5s"><b class="tf">💌</b></span>
-      <span class="fl" data-speed=".24" style="--x:30%;--y:27%;--s:28px;--r:0deg;--d:4.6s;--dl:.65s"><b class="tf">✨</b></span>
-      <span class="fl" data-speed=".36" style="--x:52%;--y:7%;--s:30px;--r:20deg;--d:5s;--dl:.8s"><b class="tf">🧤</b></span>
+      <span class="fl" data-speed=".42" style="--x:8%;--y:6%;--s:52px;--r:-12deg;--d:6.5s;--dl:.0s"><b class="tf">❄️</b></span>
+      <span class="fl" data-speed=".18" style="--x:76%;--y:8%;--s:44px;--r:12deg;--d:5.2s;--dl:.2s"><b class="tf">🧣</b></span>
+      <span class="fl" data-speed=".3" style="--x:80%;--y:40%;--s:56px;--r:8deg;--d:7s;--dl:.35s"><b class="tf">⛄</b></span>
+      <span class="fl" data-speed=".24" style="--x:62%;--y:2%;--s:26px;--r:0deg;--d:4.6s;--dl:.65s"><b class="tf">✨</b></span>
+      <span class="fl" data-speed=".36" style="--x:40%;--y:5%;--s:28px;--r:20deg;--d:5s;--dl:.8s"><b class="tf">📷</b></span>
     </div>
     <div class="col hero-inner" id="heroInner">
       <p class="eyebrow"><span class="tf">❄️</span> 2026 겨울 · 통계학과 학생회 First</p>
@@ -315,44 +338,54 @@ body.lx-on #snow{z-index:52}
         <span class="w"><i style="--i:2">마지막</i></span>
         <span class="w"><i style="--i:3">행사</i></span>
       </h1>
-      <p class="hero-sub">함께한 계절을 돌아보고<br>마지막 편지를 남겨주세요</p>
+      <p class="hero-sub">함께한 계절을 돌아보고<br>마지막 사진전에 참여해주세요</p>
     </div>
-    <div class="hero-foot" id="heroFoot">
+    <div class="col gate" id="gate">
+      <p class="gate-q">시작하기 전에 알려주세요</p>
+      <label class="gf" id="fName"><span>이름</span>
+        <input id="inName" type="text" maxlength="10" autocomplete="name" enterkeyhint="next" placeholder="홍길동">
+      </label>
+      <label class="gf" id="fSid"><span>학번</span>
+        <input id="inSid" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="10" autocomplete="off" enterkeyhint="go" placeholder="2026000000">
+      </label>
+      <button class="btn off" id="gateBtn" type="button"><span class="lbl">시작하기</span><span class="dots"><i></i><i></i><i></i></span></button>
+      <p class="gate-note">이름과 학번은 사진전·종강총회 신청에만 쓰여요</p>
+    </div>
+    <div class="col hello" id="hello" hidden>
+      <p><b id="helloName"></b>님, 반가워요 <span class="tf">❄️</span><br>올해를 함께 돌아볼까요?</p>
       <div class="scroll-hint"><span></span>스크롤해서 시작하기</div>
-      <button class="skip" id="skipBtn" type="button">바로 편지 쓰기</button>
     </div>
   </section>
 
-  <section class="scene" id="s1">
-    <div class="stage"><div class="col"><p class="lit" id="lit"></p></div></div>
-  </section>
+  <div id="story">
+    <section class="scene" id="s1">
+      <div class="stage"><div class="col"><p class="lit" id="lit"></p></div></div>
+    </section>
 
-  <div id="timeline"></div>
+    <div id="timeline"></div>
 
-  <section class="scene" id="inv">
-    <div class="stage">
-      <span class="flake-bg tf" id="flakeBg" aria-hidden="true">❄️</span>
-      <div class="col">
-        <p class="kicker" id="invKick">그리고, 겨울</p>
-        <p class="lit big" id="invLit"></p>
+    <section class="scene" id="inv">
+      <div class="stage">
+        <span class="flake-bg tf" id="flakeBg" aria-hidden="true">❄️</span>
+        <div class="col">
+          <p class="kicker" id="invKick">그리고, 겨울</p>
+          <p class="lit big" id="invLit"></p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="scene" id="s2">
-    <div class="stage"><div class="col">
-      <div id="s2head">
-        <p class="kicker">마지막 행사는</p>
-        <h2 class="scene-h">삼행시 편지예요</h2>
-      </div>
-      <div class="deck">
-        <article class="card c1"><span class="emo tf" aria-hidden="true">🪪</span><span class="no">STEP 1</span><h3>이름과 학번을<br>알려주세요</h3><p>로그인은 필요 없어요</p></article>
-        <article class="card c2"><span class="emo tf" aria-hidden="true">⛄</span><span class="no">STEP 2</span><h3>학생회 멤버<br>한 명을 골라요</h3><p>통계학과로 써도 좋아요</p></article>
-        <article class="card c3"><span class="emo tf" aria-hidden="true">✍️</span><span class="no">STEP 3</span><h3>그 이름으로<br>삼행시를 써요</h3><p>보낸 편지는 나만 볼 수 있어요</p></article>
-      </div>
-      <p class="s2cap" id="s2cap">이제, 여러분 차례예요<small class="tf" aria-hidden="true">👇</small></p>
-    </div></div>
-  </section>
+    <section class="scene" id="s2">
+      <div class="stage"><div class="col">
+        <div id="s2head">
+          <p class="kicker">마지막 행사는</p>
+          <h2 class="scene-h">사진전이에요</h2>
+          <p class="scene-p">올해 가장 빛났던 순간을 한 장 보내주세요.<br>종강총회 날 사진전에 걸려요.</p>
+        </div>
+        <div class="stack" id="stack"></div>
+        <p class="s2cap" id="s2cap">이제, 여러분의 한 장을 보여주세요<small class="tf" aria-hidden="true">👇</small></p>
+      </div></div>
+    </section>
+  </div>
 </div>
 
 <main id="app">
@@ -361,40 +394,25 @@ body.lx-on #snow{z-index:52}
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#14233a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
     </button>
   </div></header>
-
-  <section class="step col reveal" id="step1">
-    <div><span class="chip"><span class="tf">❄️</span> 겨울 편지</span>
-      <h2 class="q" id="q1">이름과 학번을<br>입력해주세요</h2></div>
-    <p class="qsub" id="q1sub">한 사람당 편지 한 통을 보낼 수 있어요</p>
-    <div class="fields">
-      <label class="field collapsed" id="fPin"><span>비밀번호 4자리</span>
-        <input id="inPin" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="0000" disabled>
-        <small>내 편지를 다시 열고 고칠 때 필요해요. 이미 보냈다면 그때 정한 번호를 입력해주세요.</small>
+  <section class="step col" id="stepPhoto">
+    <span class="chip swap"><span class="tf">📷</span> 사진전 참여</span>
+    <h2 class="q swap"><em id="who"></em>님,<br>올해 가장 빛났던 순간<br>한 장을 보내주세요</h2>
+    <p class="qsub swap" id="photoSub">한 사람당 한 장이에요. 다시 올리면 새 사진으로 바뀌어요.</p>
+    <div class="polaroid" id="pol">
+      <label class="pol-img" for="inFile" id="polImg">
+        <img id="polPic" alt="고른 사진 미리보기" hidden>
+        <span class="pol-empty" id="polEmpty"><span class="tf">📷</span><b>사진 고르기</b><small>앨범에서 한 장을 골라주세요</small></span>
       </label>
-      <label class="field" id="fName"><span>이름</span>
-        <input id="inName" type="text" maxlength="10" autocomplete="name" enterkeyhint="next" placeholder="홍길동">
-      </label>
-      <label class="field" id="fSid"><span>학번</span>
-        <input id="inSid" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="10" autocomplete="off" enterkeyhint="next" placeholder="2026000000">
-      </label>
+      <input class="pol-cap" id="inCap" maxlength="30" placeholder="사진에 한 줄 남기기 (선택)" enterkeyhint="done">
     </div>
-  </section>
-
-  <section class="step col" id="step2" hidden>
-    <h2 class="q swap"><em id="who"></em>님,<br>학생회 멤버 중 한 명을 골라<br>이름으로 삼행시를 작성해주세요</h2>
-    <p class="qsub swap">통계학과로 써도 좋아요</p>
-    <div class="members" id="members" role="radiogroup" aria-label="삼행시 대상"></div>
-  </section>
-
-  <section class="step col" id="step3" hidden>
-    <h2 class="q swap"><em id="toName"></em><span id="toJosa">에게</span> 보내는<br><span id="nLabel">삼행시</span></h2>
-    <p class="qsub swap">각 글자로 시작하는 한 줄씩 써주세요</p>
-    <div id="poem"></div>
+    <input class="vh" type="file" id="inFile" accept="image/*">
+    <button class="repick" id="repick" type="button" hidden>다른 사진 고르기</button>
+    <p class="note">보낸 사진은 학생회만 볼 수 있어요</p>
   </section>
 </main>
 
 <div class="cta" id="cta">
-  <button class="btn off" id="ctaBtn" type="button"><span class="lbl" id="ctaLbl">다음</span><span class="dots"><i></i><i></i><i></i></span></button>
+  <button class="btn off" id="ctaBtn" type="button"><span class="lbl" id="ctaLbl">사진 보내기</span><span class="dots"><i></i><i></i><i></i></span></button>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -414,11 +432,11 @@ body.lx-on #snow{z-index:52}
         <g id="mine"></g>
       </svg>
     </div>
-    <h2 class="done-t" id="doneT">눈사람이 생겼어요</h2>
+    <h2 class="done-t" id="doneT">사진이 도착했어요</h2>
     <p class="done-s" id="doneS"></p>
     <div class="done-btns">
       <button class="btn gift" id="openLetter" type="button"><span class="tf">💌</span>First가 전하는 편지 열어보기</button>
-      <button class="btn text" id="editBtn" type="button">내 편지 수정하기</button>
+      <button class="btn text" id="editBtn" type="button">내 사진 바꾸기</button>
     </div>
   </div>
 </div>
@@ -439,56 +457,79 @@ body.lx-on #snow{z-index:52}
     <p class="from">From. First</p>
     <h3 id="lcardT" style="--i:1"></h3>
     <div class="body" id="lcardBody"></div>
-    <button class="btn grey" id="closeLetter" type="button">닫기</button>
+    <button class="btn" id="closeLetter" type="button">다음</button>
   </article>
+</div>
+
+<div class="fin" id="fin" hidden>
+  <div class="col">
+    <p class="fin-k"><span class="tf">🥂</span> <span id="finDate"></span></p>
+    <h2 class="fin-t" id="finT"></h2>
+    <p class="fin-s" id="finS">함께라서 찬란했던 2026년,<br>마지막 페이지도 같이 넘겨요.</p>
+    <div class="fin-btns">
+      <button class="btn gift" id="signupBtn" type="button"><span class="lbl" id="signupLbl"></span></button>
+      <button class="btn text" id="finBack" type="button">눈사람 마당으로 돌아가기</button>
+    </div>
+  </div>
+</div>
+
+<div class="dim" id="dim" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="askT" hidden>
+  <div id="askView">
+    <span class="emo tf" aria-hidden="true">⛄</span>
+    <h3 id="askT"></h3>
+    <p><b id="sgWho"></b> 이름으로 신청돼요</p>
+    <div class="row2">
+      <button class="btn grey" id="noBtn" type="button">아니요</button>
+      <button class="btn" id="yesBtn" type="button"><span class="lbl">네</span><span class="dots"><i></i><i></i><i></i></span></button>
+    </div>
+  </div>
+  <div id="okView" hidden>
+    <span class="emo tf" aria-hidden="true">🎉</span>
+    <h3 id="okT">신청됐어요</h3>
+    <p id="okS"></p>
+    <div class="row2"><button class="btn" id="okBtn" type="button">확인</button></div>
+  </div>
 </div>
 
 <script>
 /* ═══════════════ 설정 — 여기만 고치면 됩니다 ═══════════════ */
 const CONFIG = {
-  // Apps Script 웹 앱 URL (…/exec). 비워 두면 '미리보기 모드'로 이 브라우저에만 저장됩니다.
+  // Apps Script 웹 앱 URL (…/exec). 비워 두면 '미리보기 모드'로 이 화면에서만 저장됩니다.
   API_URL: 'https://script.google.com/macros/s/AKfycbwgrrUZqLr5xTlN-HK_n3qzcoFtQgxqffuoV6uvv0-3teEt1EBq_ODkUVpaoQD4IeNnRg/exec',
   SID_DIGITS: 10,      // 학번 자릿수
-  MAX_LINE: 40,        // 삼행시 한 줄 최대 글자 수
 
-  // 2026 회상 타임라인. shots 의 src 에 사진 경로(예: 'photos/03-ot.jpg')를 넣으면 사진이 보이고, 비워 두면 자리표시가 나옵니다.
+  // 2026 회상 타임라인. photos 의 w·h 는 사진의 가로·세로 픽셀(화면 자리 잡기용).
   // bg = 그 달의 배경색, fl = 흩날리는 입자 색 (RGB)
   TIMELINE: [
-    { month: 3,  events: '새내기 OT · 새터',     bg: [58, 34, 64],  fl: [255, 190, 214],
-      shots: [{ src: '', cap: '새내기 OT', emo: '🎒' }, { src: '', cap: '새터', emo: '🌸' }] },
-    { month: 4,  events: '봄 MT',               bg: [22, 58, 44],  fl: [214, 245, 196],
-      shots: [{ src: '', cap: '봄 MT', emo: '🏕️' }] },
-    { month: 5,  events: '체육대회',             bg: [14, 62, 84],  fl: [255, 244, 176],
-      shots: [{ src: '', cap: '체육대회', emo: '🏅' }] },
-    { month: 6,  events: '야식마차',             bg: [26, 28, 78],  fl: [255, 222, 130],
-      shots: [{ src: '', cap: '야식마차', emo: '🍜' }] },
-    { month: 10, events: '가을 MT · 독수리제전',  bg: [70, 40, 20],  fl: [255, 176, 92],
-      shots: [{ src: '', cap: '가을 MT', emo: '🍂' }, { src: '', cap: '독수리제전', emo: '🦅' }] },
-    { month: 11, events: '종강총회',             bg: [40, 46, 62],  fl: [214, 222, 236],
-      shots: [{ src: '', cap: '종강총회', emo: '🥂' }] },
+    { month: 3, bg: [58, 34, 64], fl: [255, 190, 214], events: [
+      { title: '새내기배움터', photos: [
+        { src: 'photos/03-saeteo-1.jpg', w: 1179, h: 636 },
+        { src: 'photos/03-saeteo-2.jpg', w: 1600, h: 900 } ] } ] },
+    { month: 4, bg: [22, 58, 44], fl: [214, 245, 196], events: [
+      { title: '봄 MT', photos: [
+        { src: 'photos/05-springmt-2.jpg', w: 1600, h: 1200 },
+        { src: 'photos/05-springmt-1.jpg', w: 1600, h: 1200 },
+        { src: 'photos/05-springmt-3.jpg', w: 1600, h: 900 } ] } ] },
+    { month: 5, bg: [14, 62, 84], fl: [255, 244, 176], events: [
+      { title: '체육대회', photos: [
+        { src: 'photos/05-sports-2.jpg', w: 1600, h: 1200 },
+        { src: 'photos/05-sports-1.jpg', w: 1200, h: 1600 } ] } ] },
+    { month: 11, bg: [70, 40, 20], fl: [255, 176, 92], events: [
+      { title: '독수리제전', photos: [
+        { src: 'photos/11-eagle-1.jpg', w: 1600, h: 1200 } ] },
+      { title: '가을 MT', photos: [
+        { src: 'photos/11-fallmt-1.jpg', w: 1600, h: 1200 },
+        { src: 'photos/11-fallmt-2.jpg', w: 1200, h: 1600 },
+        { src: 'photos/11-fallmt-3.jpg', w: 1200, h: 1600 } ] },
+      { title: '통계학과 50주년', photos: [
+        { src: 'photos/11-50th-1.jpg', w: 1600, h: 900 } ] } ] },
   ],
-
-  // 삼행시 대상. dept: true 는 사람이 아닌 대상(맨 위에 넓게 표시).
-  EXTRA_TARGETS: [
-    { name: '통계학과', role: '우리 학과 모두에게', dept: true, emo: '❄️' },
-  ],
-  MEMBERS: [
-    { name: '정창우', role: '학회장' },
-    { name: '신유민', role: '부학회장' },
-    { name: '조한결', role: '기획부장' },
-    { name: '배준호', role: '기획부원' },
-    { name: '정여은', role: '기획부원' },
-    { name: '박승연', role: '기획부원' },
-    { name: '추성협', role: '총무' },
-    { name: '윤민준', role: '총무' },
-    { name: '이건우', role: '홍보부장' },
-    { name: '한서연', role: '홍보부원' },
-    { name: '김종욱', role: '체육부장' },
-    { name: '송오영', role: '체육부원' },
-    { name: '김수민', role: '체육부원' },
-    { name: '고경원', role: '편집부장' },
-    { name: '최서우', role: '편집부원' },
-    { name: '최연서', role: '편집부원' },
+  // '사진전이에요' 장면에서 겹쳐 쌓이는 폴라로이드 3장
+  PREVIEW: [
+    { src: 'photos/05-springmt-2.jpg', cap: '2026 봄 MT' },
+    { src: 'photos/11-eagle-1.jpg', cap: '2026 독수리제전' },
+    { src: 'photos/11-fallmt-1.jpg', cap: '2026 가을 MT' },
   ],
   // 편지 보내기 후 "First가 전하는 편지 열어보기"에서 보이는 편지. 문단마다 한 항목.
   LETTER: {
@@ -498,6 +539,13 @@ const CONFIG = {
       '문단을 나누고 싶으면 이 목록에 항목을 하나씩 추가하세요.',
     ],
     sign: 'First 학생회 일동',
+  },
+  // 마지막 화면
+  FINALE: {
+    date: '11월 26일 목요일 · 종강총회',
+    words: ['여러분과', '이', '긴', '한해의', '마지막을', '*함께', '*매듭짓고', '싶습니다.'],
+    button: '11월 26일 종강총회 추가신청하기',
+    ask: '종강총회에 참여하시겠습니까?',
   },
 };
 /* ═════════════════════════════════════════════════════════ */
@@ -511,9 +559,6 @@ const smooth = t => t * t * (3 - 2 * t);
 const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const chars = name => Array.from(name.replace(/\s/g, ''));
-const TARGETS = [...CONFIG.EXTRA_TARGETS, ...CONFIG.MEMBERS];
-const target = name => TARGETS.find(t => t.name === name);
 
 /* ───────── snow ───────── */
 const snow = (() => {
@@ -560,7 +605,7 @@ function setScene(bg, fl) {
   themeMeta.content = `rgb(${bg})`;
 }
 
-/* ───────── build: lit text + timeline ───────── */
+/* ───────── build: 문장 + 타임라인 + 폴라로이드 ───────── */
 // 단어 앞 '*' = 강조색, '~' = 이모티콘
 function litHTML(words) { return words.map(w => w[0] === '*' ? `<span class="hl">${w.slice(1)}</span>` : w[0] === '~' ? `<span class="tf">${w.slice(1)}</span>` : `<span>${w}</span>`).join(' '); }
 $('#lit').innerHTML = litHTML(['2026년의', '시작부터', '마지막까지,', '*First와', '*함께한', '*계절을', '천천히', '돌아볼게요.', '~❄️']);
@@ -569,47 +614,52 @@ $('#invLit').innerHTML = litHTML(['찬란했던', '우리의', '마지막을', '
 (function buildTimeline() {
   const root = $('#timeline');
   for (const m of CONFIG.TIMELINE) {
-    const sec = document.createElement('section'); sec.className = 'mo'; sec.dataset.m = m.month;
+    const sec = document.createElement('section'); sec.className = 'mo';
     const col = document.createElement('div'); col.className = 'col';
     const date = document.createElement('p'); date.className = 'mo-date'; date.textContent = `2026. ${String(m.month).padStart(2, '0')}`;
     const num = document.createElement('h2'); num.className = 'mo-num'; num.textContent = m.month;
     const wol = document.createElement('small'); wol.textContent = '월'; num.append(wol);
-    const ev = document.createElement('p'); ev.className = 'mo-ev'; ev.textContent = m.events;
-    const shots = document.createElement('div'); shots.className = 'shots';
-    for (const s of m.shots) {
-      const fig = document.createElement('figure'); fig.className = 'shot';
-      if (s.src) {
-        const img = document.createElement('img'); img.src = s.src; img.alt = s.cap; img.loading = 'lazy'; img.decoding = 'async';
-        const cap = document.createElement('figcaption'); cap.textContent = s.cap;
-        fig.append(img, cap);
-      } else {
-        const ph = document.createElement('div'); ph.className = 'ph';
-        const e = document.createElement('b'); e.className = 'tf'; e.textContent = s.emo || '📷';
-        ph.append(e, document.createTextNode(s.cap));
-        fig.append(ph);
+    col.append(date, num);
+    for (const ev of m.events) {
+      const box = document.createElement('div'); box.className = 'ev';
+      const t = document.createElement('h3'); t.className = 'mo-ev'; t.textContent = ev.title;
+      const shots = document.createElement('div'); shots.className = 'shots';
+      for (const p of ev.photos) {
+        const fig = document.createElement('figure'); fig.className = 'shot' + (p.h > p.w ? ' tall' : '');
+        const img = document.createElement('img');
+        img.src = p.src; img.alt = `${m.month}월 ${ev.title}`; img.width = p.w; img.height = p.h; img.loading = 'lazy'; img.decoding = 'async';
+        fig.append(img); shots.append(fig);
       }
-      shots.append(fig);
+      box.append(t, shots); col.append(box);
     }
-    col.append(date, num, ev, shots); sec.append(col); root.append(sec);
+    sec.append(col); root.append(sec);
+  }
+  const stack = $('#stack');
+  for (const p of CONFIG.PREVIEW) {
+    const c = document.createElement('div'); c.className = 'pc';
+    const img = document.createElement('img'); img.src = p.src; img.alt = p.cap; img.loading = 'lazy';
+    const cap = document.createElement('span'); cap.textContent = p.cap;
+    c.append(img, cap); stack.append(c);
   }
 })();
 
 /* ───────── scroll scenes ───────── */
 const el = {
-  intro: $('#intro'), heroInner: $('#heroInner'), heroFoot: $('#heroFoot'),
+  heroInner: $('#heroInner'), hello: $('#hello'),
   s1: $('#s1'), inv: $('#inv'), s2: $('#s2'), s2head: $('#s2head'), s2cap: $('#s2cap'),
   invKick: $('#invKick'), flakeBg: $('#flakeBg'),
-  words: $$('#lit span'), invWords: $$('#invLit span'), cards: $$('.card'),
+  words: $$('#lit span'), invWords: $$('#invLit span'), pcs: $$('.pc'),
   floaters: $$('.fl').map(f => ({ el: f, speed: +f.dataset.speed })),
   timeline: $('#timeline'), pill: $('#pill'), pillM: $('#pillM'), pillBar: $('#pillBar'),
-  step1: $('#step1'), cta: $('#cta'),
+  cta: $('#cta'),
 };
-let appMode = false, ticking = false;
+const PC_END = [[-46, 6, -8], [44, 26, 7], [0, 48, -2]];   // 폴라로이드 최종 위치 [x, y, 회전]
+let storyOn = false, appMode = false, ticking = false, ctaStory = false;
 let lay = { tlTop: 0, tlBot: 0, months: [], shots: [], nums: [], anchors: [] };
 
 function pageTop(node) { return node.getBoundingClientRect().top + scrollY; }
 function measure() {
-  if (appMode) return;
+  if (!storyOn || appMode) return;
   const vh = innerHeight;
   const shotEls = $$('.shot'), numEls = $$('.mo-num');
   for (const n of [...shotEls, ...numEls]) n.style.transform = '';
@@ -635,31 +685,30 @@ function tlColor(c) {
 }
 function prog(sec) {
   const total = sec.offsetHeight - sec.firstElementChild.offsetHeight;
-  return clamp(-sec.getBoundingClientRect().top / total);
+  return total > 0 ? clamp(-sec.getBoundingClientRect().top / total) : 0;
 }
 function frame() {
   ticking = false;
-  if (appMode) return;
+  if (appMode || !storyOn) return;
   const y = scrollY, vh = innerHeight, c = y + vh / 2;
 
-  /* hero */
+  /* 첫 화면 */
   const ph = clamp(y / vh);
   el.heroInner.style.transform = `translate3d(0,${-ph * 80}px,0) scale(${1 - ph * .1})`;
   el.heroInner.style.opacity = 1 - ph * 1.6;
-  el.heroFoot.style.visibility = ph > .3 ? 'hidden' : '';
-  el.heroFoot.style.filter = `opacity(${1 - ph * 4})`;
+  el.hello.style.opacity = 1 - ph * 3;
   if (ph < 1) for (const f of el.floaters) f.el.style.transform = `translate3d(0,${-y * f.speed}px,0) scale(${1 + ph * f.speed})`;
 
   /* 문장이 한 단어씩 밝아짐 */
   const p1 = prog(el.s1), n1 = el.words.length;
   el.words.forEach((w, i) => { const a = .12 + i / n1 * .62; w.style.opacity = .16 + .84 * seg(p1, a, a + .14); });
 
-  /* 타임라인: 사진 카드·월 숫자 패럴랙스 */
+  /* 타임라인: 사진·월 숫자 패럴랙스 */
   for (const s of lay.shots) {
     const q = (y + vh - s.top) / (vh + s.h);
     if (q < -.1 || q > 1.1) continue;
     const e = easeOut(clamp(q * 2.3));
-    s.el.style.transform = `translate3d(${(1 - e) * s.dir * 44}px,${(.5 - q) * 70}px,0) rotate(${(1 - e) * s.dir * 7}deg) scale(${.84 + .16 * e})`;
+    s.el.style.transform = `translate3d(${(1 - e) * s.dir * 44}px,${(.5 - q) * 60}px,0) rotate(${(1 - e) * s.dir * 7}deg) scale(${.84 + .16 * e})`;
     s.el.style.opacity = clamp(q * 4.5);
   }
   for (const s of lay.nums) {
@@ -684,34 +733,32 @@ function frame() {
   el.invWords.forEach((w, i) => { const a = .1 + i / ni * .6; w.style.opacity = .16 + .84 * seg(pi, a, a + .14); });
   el.flakeBg.style.transform = `rotate(${pi * 140}deg) scale(${.55 + pi * .9})`;
 
-  /* 안내 카드 덱 + 밝은 겨울 톤으로 전환 */
+  /* 사진전 소개: 밝아지며 폴라로이드가 쌓임 */
   const p2 = prog(el.s2);
-  const h2 = easeOut(seg(p2, 0, .1)), h2out = seg(p2, .74, .82);
-  el.s2head.style.opacity = h2 * (1 - h2out); el.s2head.style.transform = `translate3d(0,${(1 - h2) * 30}px,0)`;
-  el.cards.forEach((card, i) => {
-    const a = .1 + i * .22, tin = easeOut(seg(p2, a, a + .2));
-    let back = 0;
-    for (let k = i + 1; k < el.cards.length; k++) back += easeOut(seg(p2, .1 + k * .22, .3 + k * .22));
-    card.style.transform = `translate3d(0,${(1 - tin) * vh * .95 - back * 16}px,0) scale(${1 - back * .055}) rotate(${(1 - tin) * 7}deg)`;
-    card.style.setProperty('--dim', back * .38);
+  const h2 = easeOut(seg(p2, .04, .16));
+  el.s2head.style.opacity = h2; el.s2head.style.transform = `translate3d(0,${(1 - h2) * 30}px,0)`;
+  el.pcs.forEach((card, i) => {
+    const t = easeOut(seg(p2, .16 + i * .17, .36 + i * .17)), [x, yy, r] = PC_END[i];
+    const sx = i % 2 ? 1 : -1;
+    card.style.transform = `translate3d(${x + (1 - t) * sx * 90}px,${yy + (1 - t) * vh * .9}px,0) rotate(${r + (1 - t) * sx * 22}deg)`;
   });
-  const cap = easeOut(seg(p2, .9, .99));
+  const cap = easeOut(seg(p2, .82, .94));
   el.s2cap.style.opacity = cap; el.s2cap.style.transform = `translate3d(0,${(1 - cap) * 20}px,0)`;
 
-  const [bg, fl] = tlColor(c), light = smooth(seg(p2, .78, .94));
+  const [bg, fl] = tlColor(c), light = smooth(seg(p2, 0, .14));
   setScene(mix(bg, ICE, light), mix(fl, FLAKE_ON_ICE, light));
 
-  /* step 1이 화면에 들어오면 등장 + 버튼 올라오기 */
-  const formIn = el.step1.getBoundingClientRect().top < vh * .62;
-  if (formIn) el.step1.classList.add('in');
-  el.cta.classList.toggle('show', formIn);
+  ctaStory = p2 > .86;
+  el.cta.classList.toggle('show', ctaStory);
+  syncCta();
 }
 function requestFrame() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+let mTimer = 0;
+function remeasure() { clearTimeout(mTimer); mTimer = setTimeout(() => { measure(); frame(); }, 120); }
 addEventListener('scroll', requestFrame, { passive: true });
-addEventListener('resize', () => { measure(); frame(); });
-addEventListener('load', () => { measure(); frame(); });
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measure(); frame(); });
-measure(); frame();
+addEventListener('resize', remeasure);
+addEventListener('load', remeasure);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
 
 /* ───────── keyboard-aware CTA ───────── */
 if (window.visualViewport) {
@@ -721,22 +768,29 @@ if (window.visualViewport) {
 }
 
 /* ───────── API ───────── */
-const MOCK_KEY = 'first_preview_db';
-let mockMem = {};
+let mock = { photos: {}, signups: {} };
 async function mockApi(p) {            // 미리보기 전용: 실제 배포에서는 쓰이지 않음
-  await sleep(650);
-  let db = mockMem; try { db = JSON.parse(localStorage.getItem(MOCK_KEY)) || mockMem; } catch (e) {}
-  mockMem = db;
-  const row = db[p.sid];
-  if (row && row.pin !== p.pin) return { ok: false, code: 'PIN' };
-  if (p.action === 'lookup') return row ? { ok: true, exists: true, member: row.member, lines: row.lines } : { ok: true, exists: false };
-  db[p.sid] = { pin: p.pin, name: p.name, member: p.member, lines: p.lines };
-  try { localStorage.setItem(MOCK_KEY, JSON.stringify(db)); } catch (e) {}
-  return { ok: true, isNew: !row, count: Object.keys(db).length };
+  await sleep(600);
+  const row = mock.photos[p.sid];
+  if (p.action === 'photoLookup') {
+    if (!row) return { ok: true, exists: false, count: Object.keys(mock.photos).length };
+    if (row.name !== p.name) return { ok: false, code: 'NAME' };
+    return { ok: true, exists: true, caption: row.caption, image: row.image, count: Object.keys(mock.photos).length };
+  }
+  if (p.action === 'photoSave') {
+    if (row && row.name !== p.name) return { ok: false, code: 'NAME' };
+    mock.photos[p.sid] = { name: p.name, caption: p.caption, image: p.image };
+    return { ok: true, isNew: !row, count: Object.keys(mock.photos).length };
+  }
+  if (p.action === 'signup') {
+    if (mock.signups[p.sid]) return { ok: true, already: true };
+    mock.signups[p.sid] = p.name; return { ok: true, already: false };
+  }
+  return { ok: false, code: 'INVALID' };
 }
-async function api(payload) {
+async function api(payload, timeout = 20000) {
   if (!CONFIG.API_URL) return mockApi(payload);
-  const ac = new AbortController(); const to = setTimeout(() => ac.abort(), 20000);
+  const ac = new AbortController(); const to = setTimeout(() => ac.abort(), timeout);
   try {
     // Content-Type을 지정하지 않아 text/plain 단순 요청으로 전송 (Apps Script는 CORS preflight를 처리하지 못함)
     const res = await fetch(CONFIG.API_URL, { method: 'POST', body: JSON.stringify(payload), redirect: 'follow', signal: ac.signal });
@@ -744,181 +798,162 @@ async function api(payload) {
   } finally { clearTimeout(to); }
 }
 const ERR = {
-  PIN: '이 학번으로 보낸 편지가 있어요. 비밀번호를 확인해주세요',
-  LOCKED: '여러 번 틀렸어요. 10분 뒤에 다시 시도해주세요',
+  NAME: '이 학번으로 다른 이름이 등록돼 있어요. 이름과 학번을 확인해주세요',
   INVALID: '입력한 내용을 다시 확인해주세요',
-  CLOSED: '편지 접수가 마감됐어요',
+  IMAGE: '사진을 올리지 못했어요. 다른 사진으로 다시 시도해주세요',
+  CLOSED: '사진 접수가 마감됐어요',
+  SIGNUP_CLOSED: '종강총회 신청이 마감됐어요',
 };
+const errMsg = r => ERR[r && r.code] || '잠시 후 다시 시도해주세요';
 
-/* ───────── form state ───────── */
-const state = { step: 1, phase: 'id', name: '', sid: '', pin: '', member: null, drafts: {}, busy: false };
-const inName = $('#inName'), inSid = $('#inSid'), inPin = $('#inPin');
-const cta = $('#cta'), ctaBtn = $('#ctaBtn'), ctaLbl = $('#ctaLbl');
+/* ───────── state ───────── */
+const state = { name: '', sid: '', existing: null, pick: null, count: 0, signed: false, busy: false };
+const inName = $('#inName'), inSid = $('#inSid'), inCap = $('#inCap'), inFile = $('#inFile');
+const gateBtn = $('#gateBtn'), cta = el.cta, ctaBtn = $('#ctaBtn'), ctaLbl = $('#ctaLbl');
 inSid.maxLength = CONFIG.SID_DIGITS;
 inSid.placeholder = '2026' + '0'.repeat(Math.max(0, CONFIG.SID_DIGITS - 4));
 
 let toastT;
 function toast(msg) {
   const t = $('#toast'); t.textContent = msg; t.classList.add('show');
-  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600);
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2800);
 }
 function shake(node) { node.classList.remove('shake'); void node.offsetWidth; node.classList.add('shake', 'err'); setTimeout(() => node.classList.remove('shake'), 450); }
 const validName = () => inName.value.trim().length >= 2;
 const validSid = () => new RegExp(`^\\d{${CONFIG.SID_DIGITS}}$`).test(inSid.value);
-const validPin = () => /^\d{4}$/.test(inPin.value);
-const nLabel = n => ({ 2: '이행시', 3: '삼행시', 4: '사행시', 5: '오행시' }[n] || n + '행시');
+function busyBtn(btn, b) { state.busy = b; btn.classList.toggle('busy', b); }
 
-function ready() {
-  if (state.step === 1) return validName() && validSid() && (state.phase === 'id' || validPin());
-  if (state.step === 2) return !!state.member;
-  const d = state.drafts[state.member] || [];
-  return d.length > 0 && d.every(s => s.trim());
+/* ───────── 1. 첫 화면: 이름·학번 ───────── */
+function syncGate() { gateBtn.classList.toggle('off', !(validName() && validSid())); }
+inSid.addEventListener('input', () => { inSid.value = inSid.value.replace(/\D/g, ''); });
+for (const inp of [inName, inSid]) inp.addEventListener('input', () => { inp.closest('.gf').classList.remove('err'); syncGate(); });
+inName.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); inSid.focus(); } });
+inSid.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); enter(); } });
+gateBtn.addEventListener('click', enter);
+
+async function enter() {
+  if (state.busy) return;
+  if (!validName()) { shake($('#fName')); toast('이름을 입력해주세요'); inName.focus(); return; }
+  if (!validSid()) { shake($('#fSid')); toast(`학번 ${CONFIG.SID_DIGITS}자리를 입력해주세요`); inSid.focus(); return; }
+  const name = inName.value.trim(), sid = inSid.value;
+  busyBtn(gateBtn, true);
+  try {
+    const r = await api({ action: 'photoLookup', sid, name });
+    if (!r.ok) { toast(errMsg(r)); if (r.code === 'NAME') { shake($('#fName')); shake($('#fSid')); } return; }
+    state.name = name; state.sid = sid; state.count = r.count || 0;
+    state.existing = r.exists ? { image: r.image ? 'data:image/jpeg;base64,' + r.image : null, caption: r.caption || '' } : null;
+    document.activeElement && document.activeElement.blur();
+    openStory();
+  } catch (e) { toast('연결이 불안정해요. 잠시 후 다시 시도해주세요'); }
+  finally { busyBtn(gateBtn, false); }
+}
+function openStory() {
+  $('#gate').hidden = true;
+  $('#helloName').textContent = state.name;
+  const h = $('#hello'); h.hidden = false; h.classList.add('in');
+  storyOn = true;
+  document.body.classList.add('story');
+  measure(); frame();
+  setTimeout(() => scrollTo({ top: innerHeight * .9, behavior: reduced ? 'auto' : 'smooth' }), 700);
+}
+
+/* ───────── 2. 사진 올리기 ───────── */
+function setPolaroid(src, w, h) {
+  const pic = $('#polPic'), pol = $('#pol');
+  if (src) {
+    pic.src = src; pic.hidden = false; $('#polEmpty').hidden = true; pol.classList.add('has');
+    if (w && h) $('#polImg').style.aspectRatio = String(clamp(w / h, .75, 1.34));
+  } else {
+    pic.hidden = true; pic.removeAttribute('src'); $('#polEmpty').hidden = false; pol.classList.remove('has'); $('#polImg').style.aspectRatio = '';
+  }
+  $('#repick').hidden = !src;
+}
+function renderPhotoStep() {
+  $('#who').textContent = state.name;
+  const ex = state.existing;
+  if (state.pick) setPolaroid(state.pick.data, state.pick.w, state.pick.h);
+  else if (ex && ex.image) setPolaroid(ex.image);
+  else setPolaroid(null);
+  if (!state.pick) inCap.value = ex ? ex.caption : '';
+  $('#photoSub').textContent = ex ? '이미 보낸 사진이 있어요. 새 사진을 고르면 바뀌어요.' : '한 사람당 한 장이에요. 다시 올리면 새 사진으로 바뀌어요.';
+}
+function ctaMode() {
+  if (!appMode) return 'story';
+  if (state.pick) return state.existing ? 'replace' : 'send';
+  return state.existing ? 'keep' : 'send';
 }
 function syncCta() {
-  ctaLbl.textContent = state.step === 3 ? '편지 보내기' : (state.step === 1 && state.phase === 'pin') ? '확인' : '다음';
-  ctaBtn.classList.toggle('off', !ready());
+  const m = ctaMode();
+  ctaLbl.textContent = { story: '사진전에 참여할 사진 올리기', send: '사진 보내기', replace: '사진 바꿔서 보내기', keep: '이 사진 그대로 두기' }[m];
+  ctaBtn.classList.toggle('off', m === 'send' && !state.pick);
 }
-function setBusy(b) { state.busy = b; ctaBtn.classList.toggle('busy', b); }
-
-for (const inp of [inSid, inPin]) inp.addEventListener('input', () => { inp.value = inp.value.replace(/\D/g, ''); });
-for (const inp of [inName, inSid, inPin]) inp.addEventListener('input', () => { inp.closest('.field').classList.remove('err'); syncCta(); });
-inName.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); inSid.focus(); } });
-inSid.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); onCta(); } });
-inPin.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); onCta(); } });
-
-function enterApp() {
-  if (appMode) return;
+function openApp() {
   appMode = true;
   document.body.classList.add('app');
-  el.intro.hidden = true;
-  el.pill.classList.remove('show');
+  $('#intro').hidden = true; el.pill.classList.remove('show');
   setScene(ICE, FLAKE_ON_ICE);
   scrollTo(0, 0);
-  el.step1.classList.add('in');
+  renderPhotoStep(); syncCta();
   cta.classList.add('show');
-  $('#backBtn').style.visibility = state.step === 1 ? 'hidden' : '';
 }
-function go(n) {
-  enterApp();
-  state.step = n;
-  $$('.step').forEach((s, i) => { s.hidden = i + 1 !== n; });
-  $('#backBtn').style.visibility = n === 1 ? 'hidden' : '';
-  scrollTo(0, 0);
-  if (n === 2) renderMembers();
-  if (n === 3) renderPoem();
-  syncCta();
+function closeApp() {
+  appMode = false;
+  document.body.classList.remove('app');
+  $('#intro').hidden = false;
+  measure();
+  scrollTo(0, document.documentElement.scrollHeight);
+  frame();
 }
+$('#backBtn').addEventListener('click', () => { if (!state.busy) closeApp(); });
+
+async function prepImage(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    const k = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+    const w = Math.round(img.naturalWidth * k), h = Math.round(img.naturalHeight * k);
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); ctx.drawImage(img, 0, 0, w, h);
+    let q = .85, data = c.toDataURL('image/jpeg', q);          // 다시 그려서 위치정보 등 메타데이터가 빠짐
+    while (data.length > 1.6e6 && q > .45) { q -= .1; data = c.toDataURL('image/jpeg', q); }
+    return { data, w, h };
+  } finally { URL.revokeObjectURL(url); }
+}
+inFile.addEventListener('change', async () => {
+  const f = inFile.files && inFile.files[0];
+  inFile.value = '';
+  if (!f) return;
+  if (f.type && !f.type.startsWith('image/')) { toast('사진 파일만 올릴 수 있어요'); return; }
+  try {
+    state.pick = await prepImage(f);
+    setPolaroid(state.pick.data, state.pick.w, state.pick.h);
+    const pol = $('#pol'); pol.classList.remove('pop'); void pol.offsetWidth; pol.classList.add('pop');
+    syncCta();
+  } catch (e) { toast('이 사진은 열 수 없어요. 다른 사진을 골라주세요'); }
+});
+$('#repick').addEventListener('click', () => inFile.click());
+inCap.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); inCap.blur(); } });
 
 async function onCta() {
   if (state.busy) return;
-  if (state.step === 1) {
-    if (!validName()) { shake($('#fName')); toast('이름을 입력해주세요'); inName.focus(); return; }
-    if (!validSid()) { shake($('#fSid')); toast(`학번 ${CONFIG.SID_DIGITS}자리를 입력해주세요`); inSid.focus(); return; }
-    if (state.phase === 'id') {
-      state.phase = 'pin';
-      inPin.disabled = false;
-      $('#fPin').classList.remove('collapsed');
-      inPin.focus({ preventScroll: true });
-      const q = $('#q1'), s = $('#q1sub');
-      q.innerHTML = '비밀번호 4자리를<br>정해주세요'; s.textContent = '내 편지는 나만 볼 수 있어요';
-      for (const n of [q, s]) { n.classList.remove('swap'); void n.offsetWidth; n.classList.add('swap'); }
-      if (!appMode) el.step1.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
-      syncCta(); return;
-    }
-    if (!validPin()) { shake($('#fPin')); toast('숫자 4자리를 입력해주세요'); inPin.focus(); return; }
-    state.name = inName.value.trim(); state.sid = inSid.value; state.pin = inPin.value;
-    setBusy(true);
-    try {
-      const r = await api({ action: 'lookup', sid: state.sid, name: state.name, pin: state.pin });
-      if (!r.ok) { toast(ERR[r.code] || '잠시 후 다시 시도해주세요'); if (r.code === 'PIN') shake($('#fPin')); return; }
-      document.activeElement && document.activeElement.blur();
-      if (r.exists && target(r.member)) {
-        state.member = r.member; state.drafts[r.member] = r.lines.slice();
-        go(3); toast('보낸 편지를 불러왔어요. 고쳐서 다시 보낼 수 있어요');
-      } else go(2);
-    } catch (e) { toast('연결이 불안정해요. 잠시 후 다시 시도해주세요'); }
-    finally { setBusy(false); }
-    return;
-  }
-  if (state.step === 2) {
-    if (!state.member) { toast('삼행시를 쓸 이름을 골라주세요'); return; }
-    go(3); return;
-  }
-  if (!ready()) {
-    const empty = $$('#poem textarea').find(t => !t.value.trim());
-    toast('모든 줄을 채워주세요'); if (empty) empty.focus(); return;
-  }
-  const lines = state.drafts[state.member].map(s => s.trim());
-  setBusy(true);
+  const m = ctaMode();
+  if (m === 'story') { openApp(); return; }
+  if (m === 'keep') { document.activeElement && document.activeElement.blur(); showDone({ ok: true, kept: true, count: state.count }); return; }
+  if (!state.pick) { toast('사진을 한 장 골라주세요'); return; }
+  busyBtn(ctaBtn, true);
   try {
-    const r = await api({ action: 'save', sid: state.sid, name: state.name, pin: state.pin, member: state.member, lines });
-    if (!r.ok) { toast(ERR[r.code] || '잠시 후 다시 시도해주세요'); return; }
+    const caption = inCap.value.trim();
+    const r = await api({ action: 'photoSave', sid: state.sid, name: state.name, caption, image: state.pick.data.split(',')[1] }, 60000);
+    if (!r.ok) { toast(errMsg(r)); return; }
+    state.existing = { image: state.pick.data, caption }; state.pick = null; state.count = r.count || state.count;
     document.activeElement && document.activeElement.blur();
     showDone(r);
   } catch (e) { toast('연결이 불안정해요. 잠시 후 다시 시도해주세요'); }
-  finally { setBusy(false); }
+  finally { busyBtn(ctaBtn, false); syncCta(); }
 }
 ctaBtn.addEventListener('click', onCta);
-$('#backBtn').addEventListener('click', () => { if (!state.busy && state.step > 1) go(state.step - 1); });
-$('#skipBtn').addEventListener('click', () => { enterApp(); syncCta(); });
 
-/* ───────── step 2: 대상 고르기 ───────── */
-const TINT = { 학회: '#3182f6', 부학: '#3182f6', 기획: '#12a594', 총무: '#f59f00', 홍보: '#8b5cf6', 체육: '#ff7a45', 편집: '#e64980' };
-function renderMembers() {
-  $('#who').textContent = state.name;
-  const box = $('#members'); box.innerHTML = '';
-  TARGETS.forEach((m, i) => {
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'm' + (m.dept ? ' wide' : '') + (state.member === m.name ? ' sel' : ''); b.style.setProperty('--i', i);
-    b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', state.member === m.name);
-    const av = document.createElement('span'); av.className = 'av' + (m.dept ? ' tf' : '');
-    av.textContent = m.dept ? (m.emo || '❄️') : m.name.slice(-2);
-    if (!m.dept) av.style.background = TINT[(m.role || '').slice(0, 2)] || '#64748b';
-    const tx = document.createElement('span');
-    const nm = document.createElement('b'); nm.textContent = m.name;
-    const rl = document.createElement('small'); rl.textContent = m.dept ? `${m.role} · ${nLabel(chars(m.name).length)}` : (m.role || '');
-    tx.append(nm, rl);
-    const ck = document.createElement('span'); ck.className = 'ck';
-    ck.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2l2.4 2.4 4.6-5"/></svg>';
-    b.append(av, tx, ck);
-    b.addEventListener('click', () => {
-      state.member = m.name;
-      $$('.m').forEach(x => { const on = x === b; x.classList.toggle('sel', on); x.setAttribute('aria-checked', on); });
-      syncCta();
-    });
-    box.append(b);
-  });
-}
-
-/* ───────── step 3: 삼행시 ───────── */
-function renderPoem() {
-  const cs = chars(state.member), tg = target(state.member) || {};
-  const draft = state.drafts[state.member] || (state.drafts[state.member] = cs.map(() => ''));
-  $('#toName').textContent = state.member; $('#toJosa').textContent = tg.dept ? '에' : '에게'; $('#nLabel').textContent = nLabel(cs.length);
-  const box = $('#poem'); box.innerHTML = '';
-  cs.forEach((c, i) => {
-    const row = document.createElement('div'); row.className = 'line'; row.style.setProperty('--i', i);
-    const ch = document.createElement('span'); ch.className = 'ch'; ch.textContent = c;
-    const wrap = document.createElement('div'); wrap.className = 'box';
-    const ta = document.createElement('textarea');
-    ta.rows = 1; ta.maxLength = CONFIG.MAX_LINE; ta.value = draft[i] || '';
-    ta.placeholder = `${c}…`; ta.setAttribute('aria-label', `'${c}' 글자로 시작하는 줄`);
-    ta.enterKeyHint = i < cs.length - 1 ? 'next' : 'done';
-    const cnt = document.createElement('span'); cnt.className = 'cnt';
-    const fit = () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; cnt.textContent = `${ta.value.length}/${CONFIG.MAX_LINE}`; };
-    ta.addEventListener('input', () => { ta.value = ta.value.replace(/\n/g, ' '); draft[i] = ta.value; fit(); syncCta(); });
-    ta.addEventListener('keydown', e => {
-      if (e.key !== 'Enter' || e.isComposing) return;
-      e.preventDefault();
-      const next = box.querySelectorAll('textarea')[i + 1];
-      next ? next.focus() : ta.blur();
-    });
-    wrap.append(ta, cnt); row.append(ch, wrap); box.append(row);
-    requestAnimationFrame(fit);
-  });
-}
-
-/* ───────── done: 눈사람 마당 ───────── */
+/* ───────── 3. 눈사람 마당 ───────── */
 const SVGNS = 'http://www.w3.org/2000/svg';
 function svg(tag, attrs) { const n = document.createElementNS(SVGNS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); return n; }
 // 다른 사람들의 눈사람 자리: [x, y(발 위치), 크기]
@@ -947,7 +982,7 @@ function snowman(scarf, hat, parts) {
 }
 
 async function showDone(res) {
-  const done = $('#done'), gMen = $('#men'), gMine = $('#mine'), tg = target(state.member) || {};
+  const done = $('#done'), gMen = $('#men'), gMine = $('#mine');
   const count = Math.max(1, res.count || 1);
   const prior = Math.min(count - 1, SLOTS.length);
   gMen.innerHTML = ''; gMine.innerHTML = '';
@@ -964,14 +999,15 @@ async function showDone(res) {
   minePos.append(ring, mine); gMine.append(minePos);
   const parts = { b: mine.querySelector('.pb'), a: mine.querySelector('.pa'), h: mine.querySelector('.ph') };
 
-  $('#doneT').textContent = res.isNew === false ? '눈사람을 다시 빚었어요' : '눈사람이 생겼어요';
   const s = $('#doneS'); s.textContent = '';
-  const b = document.createElement('b'); b.textContent = state.member;
-  const to = tg.dept ? '에 보낸' : ' 님에게 보낸';
-  s.append(b, res.isNew === false ? `${to} 편지가 새로 반짝여요` : `${to} ${count}번째 눈사람이에요`);
+  const b = document.createElement('b'); b.textContent = state.name;
+  if (res.kept) { $('#doneT').textContent = '보낸 사진이 그대로 걸려 있어요'; s.append(b, '님의 눈사람이 기다리고 있었어요'); }
+  else if (res.isNew === false) { $('#doneT').textContent = '사진을 바꿨어요'; s.append(b, '님의 눈사람을 새로 빚었어요'); }
+  else { $('#doneT').textContent = '사진이 도착했어요'; s.append(b, `님의 사진이 ${count}번째 눈사람이 됐어요`); }
 
   const btn = ctaBtn.getBoundingClientRect();
   const from = [btn.left + btn.width / 2, btn.top + btn.height / 2];
+  cta.classList.remove('show');
   done.className = 'done'; done.hidden = false;
   document.body.classList.add('done-on'); setScene(NIGHT, WHITE);
   done.scrollTop = 0;
@@ -1019,10 +1055,11 @@ function sparks([x, y]) {
 $('#editBtn').addEventListener('click', async () => {
   const done = $('#done');
   done.classList.remove('show'); document.body.classList.remove('done-on'); setScene(ICE, FLAKE_ON_ICE);
+  renderPhotoStep(); syncCta(); cta.classList.add('show');
   await sleep(450); done.hidden = true;
 });
 
-/* ───────── First가 전하는 편지: 봉투가 열리는 연출 ───────── */
+/* ───────── 4. First가 전하는 편지: 봉투가 열리는 연출 ───────── */
 (function buildLetter() {
   const L = CONFIG.LETTER;
   $('#lcardT').textContent = L.title;
@@ -1077,13 +1114,64 @@ function closeLetter() {
   if (lxBusy || lx.hidden) return;
   lx.classList.add('out'); document.body.classList.remove('lx-on');
   setTimeout(() => { lx.hidden = true; lx.className = 'lx'; }, 420);
+  openFin();
 }
 $('#openLetter').addEventListener('click', openLetter);
 $('#closeLetter').addEventListener('click', closeLetter);
 lx.addEventListener('click', e => { if (e.target === lx && lx.classList.contains('e5')) closeLetter(); });
 
+/* ───────── 5. 마지막: 매듭 + 종강총회 신청 ───────── */
+const F = CONFIG.FINALE, fin = $('#fin');
+$('#finDate').textContent = F.date;
+$('#finT').innerHTML = F.words.map((w, i) => w[0] === '*' ? `<span class="hl" style="--i:${i}">${w.slice(1)}</span>` : `<span style="--i:${i}">${w}</span>`).join(' ');
+$('#askT').textContent = F.ask;
+function syncSignup() {
+  $('#signupLbl').textContent = state.signed ? '종강총회 신청 완료' : F.button;
+  $('#signupBtn').classList.toggle('off', state.signed);
+}
+syncSignup();
+function openFin() {
+  fin.hidden = false; fin.scrollTop = 0;
+  document.body.classList.add('fin-on');
+  void fin.offsetWidth; fin.classList.add('show');
+}
+$('#finBack').addEventListener('click', () => {
+  fin.classList.remove('show'); document.body.classList.remove('fin-on');
+  setTimeout(() => { fin.hidden = true; }, 700);
+});
+const dim = $('#dim'), sheet = $('#sheet');
+function openSheet() {
+  $('#askView').hidden = false; $('#okView').hidden = true;
+  $('#sgWho').textContent = `${state.name} · ${state.sid}`;
+  dim.hidden = sheet.hidden = false; void sheet.offsetWidth;
+  dim.classList.add('show'); sheet.classList.add('show');
+}
+function closeSheet() {
+  if (state.busy) return;
+  dim.classList.remove('show'); sheet.classList.remove('show');
+  setTimeout(() => { dim.hidden = sheet.hidden = true; }, 500);
+}
+$('#signupBtn').addEventListener('click', () => { if (state.signed) { toast('이미 신청했어요. 11월 26일에 만나요'); return; } openSheet(); });
+$('#noBtn').addEventListener('click', closeSheet);
+dim.addEventListener('click', closeSheet);
+$('#okBtn').addEventListener('click', closeSheet);
+$('#yesBtn').addEventListener('click', async () => {
+  if (state.busy) return;
+  const yes = $('#yesBtn');
+  busyBtn(yes, true);
+  try {
+    const r = await api({ action: 'signup', sid: state.sid, name: state.name });
+    if (!r.ok) { toast(errMsg(r)); return; }
+    state.signed = true; syncSignup();
+    $('#okT').textContent = r.already ? '이미 신청돼 있어요' : '신청됐어요';
+    $('#okS').textContent = '11월 26일 종강총회에서 만나요';
+    $('#askView').hidden = true; $('#okView').hidden = false;
+  } catch (e) { toast('연결이 불안정해요. 잠시 후 다시 시도해주세요'); }
+  finally { busyBtn(yes, false); }
+});
+
 if (!CONFIG.API_URL) { const b = document.createElement('div'); b.className = 'badge'; b.textContent = '미리보기 모드 · 실제로 저장되지 않아요'; document.body.append(b); }
-syncCta();
+syncGate();
 </script>
 </body>
 </html>
